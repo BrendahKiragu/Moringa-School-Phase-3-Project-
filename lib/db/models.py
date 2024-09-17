@@ -9,9 +9,12 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer(), primary_key=True)
-    username = Column(String())
-    password = Column(String())
-
+    username = Column(String(), nullable=False)
+    password = Column(String(), nullable=False)
+    
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
 class Job_field(Base):
     __tablename__ = 'job_fields'    
@@ -42,4 +45,5 @@ class Answer(Base):
     id = Column(Integer(), primary_key=True) 
     answer_text = Column(String())
     question_id = Column(Integer(), ForeignKey('questions.id'))#An answer belongs to a question
-    
+
+Base.metadata.create_all(myengine)
