@@ -1,4 +1,4 @@
-from db.models import User, myengine
+from db.models import User, myengine, Job_field
 from sqlalchemy.orm import sessionmaker
 
 session1 = sessionmaker(bind=myengine)
@@ -7,6 +7,22 @@ mysession = session1()
 def exit_program():
   print('Good Luck in your Interview')
   exit()
+
+def take_quiz():
+   
+   pass
+
+def create_quiz():
+   pass
+
+def show_jobs():
+  #  selected_job = input("> ")
+   try:
+       for job in mysession.query(Job_field).all():
+          print(job)
+       
+   except Exception as exc:
+      print("invalid input ", exc)
 
 # Class USER 
 #def create user()
@@ -40,7 +56,6 @@ def delete_user():
     password = input("Enter your password: ")
 
     user_to_delete = mysession.query(User).filter_by(username=username).first()
-    # correct_password = mysession.query(User).filter_by(password=password).first()
     
     if user_to_delete and user_to_delete.password == password:
         try:     
@@ -56,9 +71,34 @@ def delete_user():
 
 #Class JOB_FIELD
 #def create job_field()
+def create_job_field():
+  name = input("Create job field > ") 
+
+  try:
+      job = Job_field(job_name=name) 
+      mysession.add(job)
+      mysession.commit()
+      print(f"{job.job_name} added successfully.")
+  except Exception as exc:
+     print("Error creating job field ", exc)     
 #def delete job_field()
+def delete_job_field():
+    name_ = input("Enter Job field to delete > ")
+
+    try:
+        field_to_delete = mysession.query(Job_field).filter_by(job_name=name_).first()
+        if field_to_delete:
+                mysession.delete(field_to_delete)
+                mysession.commit()
+                print(f"Job_field {name_} deleted")
+        else:
+           print("Job field not found")        
+    except Exception as exc:
+      print("Error deleting the job field ", exc)      
 #def list_jobs_fields()
 #def find_by_id()
+def find_by_id():
+   pass
 
 #Class Topic
 #def create topic
