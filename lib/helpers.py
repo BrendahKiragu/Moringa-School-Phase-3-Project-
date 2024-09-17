@@ -1,4 +1,4 @@
-from db.models import User, myengine, Job_field
+from db.models import User, myengine, Job_field, Question
 from sqlalchemy.orm import sessionmaker
 
 session1 = sessionmaker(bind=myengine)
@@ -13,14 +13,27 @@ def take_quiz():
    pass
 
 def create_quiz():
-   pass
+    pass
 
 def show_jobs():
   #  selected_job = input("> ")
    try:
-       for job in mysession.query(Job_field).all():
-          print(job)
-       
+       jobs = mysession.query(Job_field).all() #gives a number to the list items
+       if not jobs:
+          print("No jobs available at the moment")
+
+       for number, job in enumerate(jobs, start=1) : #adds numbering to the job field objects
+           print(f"({number}) {job.job_name}")
+           
+       selected_job =input("SELECT JOB BY NUMBER: ")    
+
+       selected_job_number = int(selected_job) #converts selected_job input to integer
+
+       if 1 <= selected_job_number <= len(jobs): #check if the selected input is within range 
+          jobname = jobs[selected_job_number-1] #access the name of the list item
+          print(f"selected {jobname.job_name}")
+       else:
+          print("Invalid Input! Select a valid job field from The list") 
    except Exception as exc:
       print("invalid input ", exc)
 
@@ -80,7 +93,8 @@ def create_job_field():
       mysession.commit()
       print(f"{job.job_name} added successfully.")
   except Exception as exc:
-     print("Error creating job field ", exc)     
+     print("Error creating job field ", exc)  
+
 #def delete job_field()
 def delete_job_field():
     name_ = input("Enter Job field to delete > ")
