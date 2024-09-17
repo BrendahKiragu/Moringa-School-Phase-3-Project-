@@ -13,6 +13,19 @@ def login():
 
 # Class USER 
 #def create user()
+def create_user():
+  username = input("Enter your name: ")
+  password = input("Create your password: ")
+
+  try:
+    user = User(username=username, password=password)
+    mysession.add(user)
+    mysession.commit()
+    print(f"Welcome {user.username}")
+    return user
+  except Exception as exc:
+    print("Error creating account: ", exc)  
+
 
 #def delete user()
 #def list_users()
