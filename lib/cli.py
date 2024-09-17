@@ -1,6 +1,6 @@
 from helpers import (
   exit_program, create_user, login,
-  take_quiz, create_quiz,
+  show_jobs, create_quiz,
   delete_user,
 )
 
@@ -24,20 +24,22 @@ def app():
 def menu():
   print("Welcome to Interview Master. How can we help you today? ") 
   print("0. Exit")
-  print("1. Create account")
-  print("2. Login")
-  print("5. Delete my account")
+  print("1. CREATE AN ACCOUNT")
+  print("2. LOGIN")
+  print("5. DELETE MY ACCOUNT")
 
 def menu2():
    while True:
-       print("3. Take A quiz")
-       print("4. Create a quiz")
-       print("5. Delete my account")
-       print("0. Logout")
+       print("3. SELECT JOB FIELD")
+       print("4. TAKE A QUIZ")
+       print("5. CREATE A QUIZ")
+       print("6. DELETE MY ACCOUNT")
+       print("0. LOGOUT")
        
        choice = input("> ")
        if choice == "3":
-          take_quiz()
+          print("SELECT JOB FIELD.")
+          show_jobs()
        elif choice == "4":
           create_quiz()
        elif choice == "5":
