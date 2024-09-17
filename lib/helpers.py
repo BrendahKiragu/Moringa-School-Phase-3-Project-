@@ -1,4 +1,4 @@
-from db.models import User, myengine, Job_field, Question
+from db.models import User, myengine, Job_field, Question, Answer
 from sqlalchemy.orm import sessionmaker
 
 session1 = sessionmaker(bind=myengine)
@@ -14,13 +14,60 @@ def take_quiz():
 
 def create_quiz():
    quiz = input("Type the quiz > ")
+   answer1 = input("Answer 1: ")
+   answer2 = input("Answer 2: ")
+   answer3 = input("Answer 3: ")
+   answer4 = input("Answer 4: ")
+   correct_answer = int(input("Enter the number of the correct answer(1-4) "))
+
    try:
-       question = Question(question_text=quiz)
-       mysession.add(question)
+       question = Question(question_text=quiz) #creates a new question instance
+
+       answers = [
+            Answer(answer_text=answer1, question=question),
+            Answer(answer_text=answer2, question=question),
+            Answer(answer_text=answer3, question=question),
+            Answer(answer_text=answer4, question=question)
+        ] #Creates answers for the created question
+       
+       mysession.add(question) #adds quiz to questions table
+       mysession.add_all(answers) #adds answers to answers table
        mysession.commit()
+
+       question.correct_answer_id = answers[correct_answer - 1].id
+       mysession.commit()
+       print("Question created successfully!")
+
    except Exception as exc:
-      print("Error creating question", exc)     
-   
+      print("Error creating question", exc)   
+        
+def delete_quiz():
+    query = int(input("Enter Quiz id: "))
+
+    quiz_to_delete = mysession.query(Question).filter_by(id=query).first()
+    if quiz_to_delete:
+       try:
+           mysession.delete(quiz_to_delete)
+           mysession.commit()
+           print("Quiz Deleted")
+       except Exception as exc:
+           print("Error deleting question...", exc)
+    else:
+       print("Question does not exist!")
+    
+# def create_answers():
+#    answers = []
+
+#    try:
+#       for i in range(1, 5):
+#          answer = input(f"type answer {i} > ") 
+#          answers.append(Answer(answer_text=answer))
+
+#       mysession.add_all(answers)
+#       mysession.commit()
+#       print("Answers added successfully!")
+#    except Exception as exc:
+#       print("Error creating answers", exc)   
 
 def show_jobs():
   #  selected_job = input("> ")
@@ -142,3 +189,4 @@ def find_by_id():
 #def list_topic_questions()
 #def list_question_answers()
 #def list_job_field_topics()
+
