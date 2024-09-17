@@ -13,7 +13,14 @@ def take_quiz():
    pass
 
 def create_quiz():
-    pass
+   quiz = input("Type the quiz > ")
+   try:
+       question = Question(question_text=quiz)
+       mysession.add(question)
+       mysession.commit()
+   except Exception as exc:
+      print("Error creating question", exc)     
+   
 
 def show_jobs():
   #  selected_job = input("> ")
