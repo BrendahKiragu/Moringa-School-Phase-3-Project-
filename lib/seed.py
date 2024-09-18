@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-from helpers import (create_job_field,delete_job_field, delete_quiz,
+from helpers import (create_job_field,delete_job_field, delete_quiz,create_topic,
 create_quiz)
 
 
 print("...seeding database")   
 # create_job_field()
 # delete_job_field()
+# create_topic()
 # create_quiz()
-delete_quiz()
+# delete_quiz()
