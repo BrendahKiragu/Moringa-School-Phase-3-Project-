@@ -5,59 +5,10 @@ import json
 session1 = sessionmaker(bind=myengine)
 mysession = session1()
 
+#CLI functions
 def exit_program():
   print('Good Luck in your Interview')
   exit()
-
-def take_quiz():
-   
-   pass    
-
-def show_jobs():
-   try:
-       jobs = mysession.query(Job_field).all() #gives a number to the list items
-       if not jobs:
-          print("No jobs available at the moment")
-
-       for number, job in enumerate(jobs, start=1) : #adds numbering to the job field objects
-           print(f"({number}) {job.job_name}")
-           
-       selected_job =input("SELECT JOB BY NUMBER: ")    
-
-       selected_job_number = int(selected_job) #converts selected_job input to integer
-
-       if 1 <= selected_job_number <= len(jobs): #check if the selected input is within range 
-          jobname = jobs[selected_job_number-1] #access the name of the list item
-          print(f"selected {jobname.job_name}")
-       else:
-          print("Invalid Input! Select a valid job field from The list") 
-   except Exception as exc:
-      print("Error fetching job fields ", exc)
-
-# Class USER 
-#def create user()
-def create_user():
-    username = input("Enter your name: ").strip()
-    password = input("Create your password: ").strip()
-
-    # Input validation
-    if not username:
-        print("Username must not be empty!")
-        return  # Exit the function if validation fails
-
-    if len(password) < 4:
-        print("Password must be at least 4 characters long!")
-        return  # Exit the function if validation fails
-
-    # Attempt to create the user
-    try:
-        user = User(username=username, password=password)
-        mysession.add(user)
-        mysession.commit()
-        print(f"Welcome {user.username}. What do you want to do today?")
-    except Exception as exc:
-        print("Error creating account: ", exc)
-  
 
 def login():
     username = input("Enter your name: ")
@@ -68,12 +19,95 @@ def login():
 
         if user and user.password == password:
           print(f"Glad to see you again {user.username}, What do you wanna do today?")
+          return User
         else:
-          raise ValueError("Invalid username or password!")  
+           print("Invalid credentials!")
+           return None
     except Exception as exc:
         print("Error logging in, ", exc)
+       
+def show_jobs():
+   try:
+       jobs = mysession.query(Job_field).all() #gives a number to the list items
+       if not jobs:
+          print("No jobs available at the moment")
+          return None
 
-#def delete user()
+       for number, job in enumerate(jobs, start=1) : #adds numbering to the job field objects
+           print(f"({number}) {job.job_name}")
+
+       show_field_topics()
+           
+       selected_job = input("SELECT JOB BY NUMBER: ")    
+
+       selected_job_number = int(selected_job) #converts selected_job input to integer
+
+       if 1 <= selected_job_number <= len(jobs): #check if the selected input is within range 
+          jobname = jobs[selected_job_number-1] #access the name of the list item
+          take_quiz()
+          return jobname
+       else:
+          print("Invalid Input! Select a valid job field from The list") 
+   except Exception as exc:
+      print("Error fetching job fields ", exc)
+
+def take_quiz():
+    topic_name = input("Enter the topic name to practice on: ")
+
+    try:
+        # Fetches a topic based on the title input
+        topic = mysession.query(Topic).filter_by(title=topic_name).first()
+
+        if not topic:
+            print("Topic not found!")
+            return None
+
+        # Fetches questions related to the selected topic
+        questions = mysession.query(Question).filter_by(topic_id=topic.id).all()
+
+        if questions:
+            print(f"Starting quiz for topic: {topic.title}")
+            score = 0
+        else:
+            print(f"Sorry, no available quizes for this {topic.title}")    
+
+        for question in questions:
+            print(f"Question: {question.question_text}")
+            answers = json.loads(question.answers_text) 
+            for index, answer in enumerate(answers, start=1):
+                print(f"{index}. {answer}")
+
+            try:
+                user_answer = int(input("Your answer (1-4)> _ "))
+
+                if user_answer == question.correct_answer:
+                    print("Correct!")
+                    score += 1
+                else:
+                    print(f"That doesn't seem right! The correct answer is: {question.correct_answer}")
+            except ValueError:
+                print("Invalid input! Please enter a number between 1 and 4.")
+
+        # Display final score
+        print(f"Quiz finished! You scored: {score}/{len(questions)}")
+        
+    except Exception as exc:
+        print("Error taking the quiz", exc)
+   
+
+#Class User functions
+def create_user():
+    username = input("Enter your name: ").strip()
+    password = input("Create your password: ").strip()
+
+    try:
+        user = User(username=username, password=password)
+        mysession.add(user)
+        mysession.commit()
+        print(f"Welcome {user.username}. What do you want to do today?")
+    except Exception as exc:
+        print("Error creating account: ", exc)
+
 def delete_user():
     username = input("Enter user's name: ")
     password = input("Enter your password: ")
@@ -88,12 +122,31 @@ def delete_user():
         except Exception as exc:
             print("Error occurred deleting the account, try again!", exc)  
     else:
-       print("User account or password incorrect")             
+       print("User account or password incorrect")  
 
-#def list_users()
+def list_users():
+    try:
+        users = mysession.query(User).all()
+        for user in users:
+            print(f"User {user.id} : {user.username}")
+            print("_" * 100)
+    except Exception as exc:
+        print("Error retrieving questions", exc) 
 
-#Class JOB_FIELD
-#def create job_field()
+def find_user_by_name():
+    query = input("Enter user name > ")
+
+    try:
+        user = mysession.query(User).filter_by(username=query).first()
+
+        if user:
+            print(f"User {user.id} : {user.username}")
+        else:
+            print("User not found!")    
+    except Exception as exc:
+        print("Error fetching job field", exc)
+
+#Class JOB_FIELD functions
 def create_job_field():
   name = input("Create job field > ") 
 
@@ -105,7 +158,6 @@ def create_job_field():
   except Exception as exc:
      print("Error creating job field ", exc)  
 
-#def delete job_field()
 def delete_job_field():
     name_ = input("Enter Job field name to delete > ")
 
@@ -119,16 +171,33 @@ def delete_job_field():
            print(f"Job field '{name_}' not  found")        
     except Exception as exc:
       print("Error deleting the job field ", exc)      
-#def list_jobs_fields()
-#def find_by_id()
-def find_by_id():
-   pass
 
-#Class Topic
-#def create topic
-#def delete topic
-#def list_topics()
-#def find_by_id 
+def list_job_fields():
+    try:
+        fields = mysession.query(Job_field).all()
+        for field in fields:
+            print(f"Job Field id: {field.id}")
+            print(f"Job Name: {field.job_name}")
+            print("_" * 100)
+    except Exception as exc:
+        print("Error retrieving questions", exc) 
+
+def find_field_by_name():
+    query = input("Enter job field name > ")
+
+    try:
+        field = mysession.query(Job_field).filter_by(job_name=query).first()
+
+        if field:
+            print(f"Job Field id: {field.id}")
+            print(f"Job name: {field.job_name}")
+        else:
+            print("Field not found!")    
+    except Exception as exc:
+        print("Error fetching job field", exc) 
+
+
+#Class Topicfunctions
 def create_topic():
     name = input("Create topic title > ")
     field_id = input("Enter job field id > ")
@@ -157,10 +226,13 @@ def delete_topic():
 def list_topics():
     try:
         topics = mysession.query(Topic).all()
+        jobs = mysession.query(Job_field).all()
+        print(f"Let's get your started with one of the available quizzes below.")
+
         for topic in topics:
-            print(f"Topic id: {topic.id}")
+            job = next((job for job in jobs if job.id == topic.job_field_id), None)
             print(f"Title: {topic.title}")
-            print(f"Job field id: {topic.job_field_id}")
+            print(f"Job field: {job.job_name if job else 'Not found'}")
             print("_" * 100)
     except Exception as exc:
         print("Error retrieving questions", exc) 
@@ -178,6 +250,22 @@ def find_topic_by_name():
     except Exception as exc:
         print("Error fetching topic", exc)    
 
+def show_field_topics():
+    job_id =input("Select Topic To Practice 0n > ")
+
+    topics = mysession.query(Topic).filter_by(job_field_id=job_id).all()
+    if topics:
+        for index, topic in enumerate(topics, start=1):
+            print(f"{index}:  {topic.title}")
+ 
+
+    #     for topic in topics:
+
+    #         print(f"{topic.title}")
+
+    #  for number, job in enumerate(jobs, start=1) : #adds numbering to the job field objects
+    #        print(f"({number}) {job.job_name}")
+#Class Question functions
 #adds question to table questions
 def create_quiz():
    quiz = input("Type the quiz > ")

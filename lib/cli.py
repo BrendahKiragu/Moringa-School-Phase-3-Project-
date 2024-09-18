@@ -1,6 +1,6 @@
 from helpers import (
   exit_program, create_user, login,
-  show_jobs, create_quiz,  delete_user,
+ show_jobs, create_quiz,  delete_user, take_quiz
 )
 
 def app():
@@ -14,8 +14,11 @@ def app():
          menu2() #shows after an account is created
            
       elif choice == "2":
-         login()
-         menu2()
+         if login():
+             menu2() #shows if login is successful
+         else:
+            menu() #shows if login is unsuccessful
+            print("Invalid Credentials. Confirm username or password is correct!")   
       elif choice == "5":
          delete_user()  
       else:
@@ -31,7 +34,7 @@ def menu():
 
 def menu2():
     while True:
-        print("3. SELECT JOB FIELD")
+        print("3. Practice for an Interview")
         print("4. CREATE A QUIZ")
         print("5. DELETE MY ACCOUNT")
         print("0. LOGOUT")
@@ -39,7 +42,8 @@ def menu2():
         choice = input("> ")
         if choice == "3":
            print("SELECT JOB FIELD.")
-           show_jobs()
+           show_jobs() #shows available job fields
+           take_quiz()
         elif choice == "4":
            create_quiz()
         elif choice == "5":
@@ -52,3 +56,5 @@ def menu2():
 
 if __name__ == "__main__":
      app()     
+
+     
