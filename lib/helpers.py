@@ -1,5 +1,6 @@
-from db.models import User, myengine, Job_field, Question, Answer
+from db.models import User, myengine, Job_field, Question
 from sqlalchemy.orm import sessionmaker
+import json
 
 session1 = sessionmaker(bind=myengine)
 mysession = session1()
@@ -21,21 +22,18 @@ def create_quiz():
    correct_answer = int(input("Enter the number of the correct answer(1-4) "))
 
    try:
-       question = Question(question_text=quiz) #creates a new question instance
+       answers = [answer1, answer2, answer3, answer4]
+       answers_json = json.dumps(answers)
 
-       answers = [
-            Answer(answer_text=answer1, question=question),
-            Answer(answer_text=answer2, question=question),
-            Answer(answer_text=answer3, question=question),
-            Answer(answer_text=answer4, question=question)
-        ] #Creates answers for the created question
+       question = Question(
+            question_text=quiz,
+            answers_text=answers_json,  # Store answers as JSON string
+            correct_answer=correct_answer  # Store the index of the correct answer
+        )
        
-       mysession.add(question) #adds quiz to questions table
-       mysession.add_all(answers) #adds answers to answers table
+       mysession.add_all(question) #adds quiz to questions table
        mysession.commit()
 
-       question.correct_answer_id = answers[correct_answer - 1].id
-       mysession.commit()
        print("Question created successfully!")
 
    except Exception as exc:
@@ -179,14 +177,3 @@ def find_by_id():
 #def delete question
 #def list_questions()
 #def find_by_id
-
-#Class Answer
-#def create answers
-#def delete answers
-#def list_answers()
-#def find_by_id
-
-#def list_topic_questions()
-#def list_question_answers()
-#def list_job_field_topics()
-
