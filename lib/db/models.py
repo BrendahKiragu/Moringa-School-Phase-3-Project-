@@ -36,14 +36,8 @@ class Question(Base):
 
     id = Column(Integer(), primary_key=True)
     question_text = Column(String())
+    answers_text = Column(String())#stores answers as a JSON string
+    correct_answer = Column(Integer()) #stores the index of the correct answer
     topic_id = Column(Integer(), ForeignKey('topics.id'))#A question belongs to topic
-    answers = relationship('Answer', backref=backref('question')) #A question has many answers
-
-class Answer(Base):
-    __tablename__ = 'answers'
-    
-    id = Column(Integer(), primary_key=True) 
-    answer_text = Column(String())
-    question_id = Column(Integer(), ForeignKey('questions.id'))#An answer belongs to a question
 
 Base.metadata.create_all(myengine)
