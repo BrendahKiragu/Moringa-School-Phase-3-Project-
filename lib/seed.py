@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from helpers import mysession, delete_user
-from db.models import Topic, Job_field, User
+from db.models import Topic, Job_field, User, Question
+import json
 
 
 print("...seeding database")   
@@ -136,4 +137,39 @@ def list_users():
     except Exception as exc:
         print("Error retrieving questions", exc)  
 # list_users()   
-# delete_user()           
+# delete_user()    
+
+
+#class QUESTIONS functions
+def find_question_by_id():
+    """Finds question by id"""
+    question_id = input("Search quiz by id > ")
+
+    try:
+        quiz = mysession.query(Question).filter_by(id=question_id).first()
+        if quiz:
+            print(f"ID: {quiz.id}")
+            print(f"Question: {quiz.question_text}")
+            print(f"Answers: {json.loads(quiz.answers_text)}")  # Converts JSON string back to list
+            print(f"Correct Answer Index: {quiz.correct_answer}")
+        else:
+            print("Question not found.")
+
+    except Exception as exc:
+        print("Error retrieving quiz", exc)  
+# find_question_by_id()
+
+#lists all questions
+def list_questions():
+    """Lists all questions available in the database"""
+    try:
+        questions = mysession.query(Question).all()
+        for question in questions:
+            print(f"Question id: {question.id}")
+            print(f"Question: {question.question_text}")
+            print(f"Answers: {json.loads(question.answers_text)}")
+            print(f"Correct Answer Index: {question.correct_answer}")
+            print("_" * 100)
+    except Exception as exc:
+        print("Error retrieving questions", exc)
+# list_questions()          
