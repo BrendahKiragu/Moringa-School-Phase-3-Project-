@@ -2,13 +2,13 @@
 - **Interview Master** is a CLI app designed to store user data, job fields, topics, and interview questions, offering a structured system for practicing interview questions across various job categories.
 - Interview Master uses **SQLAlchemy** to manage the _interview_prep_ SQLite database.
 
-Table of Contents
+## Table of Contents
 1. [Installation](#installation)
-2. [Database Models](#database_models)
-3. [CLI Commands](#cli_commands)
-4. [Helper Functions](#helpers_functions)
+2. [Database Models](#database-models)
+3. [CLI Commands](#cli-commands)
+4. [Helper Functions](#helper-functions)
 5. [Database](#database)
-6. [Seeding Data](#seeding_data)
+6. [Seeding Data](#seeding-data)
 
 # Installation
 Follow these steps to set up the project:
