@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
 from helpers import (
   exit_program, create_user, login,
  show_jobs, create_quiz,  delete_user, take_quiz
 )
 
 def app():
+    """CLI app"""
     while True:
       menu()
       choice = input("> ")
@@ -26,6 +28,7 @@ def app():
        
 
 def menu():
+    """Starting menu when CLI app initializes"""
     print("______Welcome to Interview Master. How can we help you today?______ ") 
     print("0. Exit")
     print("1. CREATE AN ACCOUNT")
@@ -33,6 +36,7 @@ def menu():
     print("5. DELETE MY ACCOUNT")
 
 def menu2():
+    """Shows up when a user is logged in to the app"""
     while True:
         print("3. Practice for an Interview")
         print("4. CREATE A QUIZ")
@@ -44,6 +48,7 @@ def menu2():
            print("SELECT JOB FIELD.")
            show_jobs() #shows available job fields
            take_quiz()
+               
         elif choice == "4":
            create_quiz()
         elif choice == "5":
@@ -52,7 +57,7 @@ def menu2():
            print('LOGGING OUT...')
            break
         else:
-           print("Invalid choice, please try agin.")    
+           print("Invalid choice, please try again.")    
 
 if __name__ == "__main__":
      app()     

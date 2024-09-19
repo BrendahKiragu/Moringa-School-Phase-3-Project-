@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from db.models import User, myengine, Job_field, Question, Topic
 from sqlalchemy.orm import sessionmaker
 import json
@@ -7,18 +8,20 @@ mysession = session1()
 
 #CLI functions
 def exit_program():
+  """Exits from the CLI app"""
   print('Good Luck in your Interview')
   exit()
 
 def login():
-    username = input("Enter your name: ")
-    password = input("Enter your password: ")
+    """Logs in a user if the username and password exists in the database"""
+    username = input("UserName: ")
+    password = input("Password: ")
         
     try:
         user = mysession.query(User).filter_by(username=username).first()
 
         if user and user.password == password:
-          print(f"Glad to see you again {user.username}, What do you wanna do today?")
+          print(f".........Glad to see you again {user.username}, What do you wanna do today?..........")
           return User
         else:
            print("Invalid credentials!")
@@ -27,6 +30,7 @@ def login():
         print("Error logging in, ", exc)
        
 def show_jobs():
+   """Shows all available jobs in the database"""
    try:
        jobs = mysession.query(Job_field).all() #gives a number to the list items
        if not jobs:
@@ -38,7 +42,7 @@ def show_jobs():
 
        show_field_topics()
            
-       selected_job = input("SELECT JOB BY NUMBER: ")    
+       selected_job = input("Select Topic(number) To Practice On: ")    
 
        selected_job_number = int(selected_job) #converts selected_job input to integer
 
@@ -52,11 +56,11 @@ def show_jobs():
       print("Error fetching job fields ", exc)
 
 def take_quiz():
-    topic_name = input("Enter the topic name to practice on: ")
-
+    """CLI functions for starting a quiz of the selected topic"""
+    topic_choosen = input("Enter number > ")
     try:
         # Fetches a topic based on the title input
-        topic = mysession.query(Topic).filter_by(title=topic_name).first()
+        topic = mysession.query(Topic).filter_by(title=topic_choosen).first()
 
         if not topic:
             print("Topic not found!")
@@ -78,7 +82,7 @@ def take_quiz():
                 print(f"{index}. {answer}")
 
             try:
-                user_answer = int(input("Your answer (1-4)> _ "))
+                user_answer = int(input("Your answer (1-4)>_ "))
 
                 if user_answer == question.correct_answer:
                     print("Correct!")
@@ -88,15 +92,17 @@ def take_quiz():
             except ValueError:
                 print("Invalid input! Please enter a number between 1 and 4.")
 
-        # Display final score
+        # Displays final score
         print(f"Quiz finished! You scored: {score}/{len(questions)}")
-        
+        print("SELECT ANOTHER JOB FIELD/ TOPIC TO PRACTICE ON >")
+        exit()
     except Exception as exc:
         print("Error taking the quiz", exc)
    
 
 #Class User functions
 def create_user():
+    """Adds a user to users table"""
     username = input("Enter your name: ").strip()
     password = input("Create your password: ").strip()
 
@@ -109,6 +115,7 @@ def create_user():
         print("Error creating account: ", exc)
 
 def delete_user():
+    """Deletes user from users table"""
     username = input("Enter user's name: ")
     password = input("Enter your password: ")
 
@@ -123,184 +130,117 @@ def delete_user():
             print("Error occurred deleting the account, try again!", exc)  
     else:
        print("User account or password incorrect")  
+  
 
-def list_users():
-    try:
-        users = mysession.query(User).all()
-        for user in users:
-            print(f"User {user.id} : {user.username}")
-            print("_" * 100)
-    except Exception as exc:
-        print("Error retrieving questions", exc) 
-
-def find_user_by_name():
-    query = input("Enter user name > ")
-
-    try:
-        user = mysession.query(User).filter_by(username=query).first()
-
-        if user:
-            print(f"User {user.id} : {user.username}")
-        else:
-            print("User not found!")    
-    except Exception as exc:
-        print("Error fetching job field", exc)
-
-#Class JOB_FIELD functions
-def create_job_field():
-  name = input("Create job field > ") 
-
-  try:
-      job = Job_field(job_name=name) 
-      mysession.add(job)
-      mysession.commit()
-      print(f"{job.job_name} added successfully.")
-  except Exception as exc:
-     print("Error creating job field ", exc)  
-
-def delete_job_field():
-    name_ = input("Enter Job field name to delete > ")
-
-    try:
-        field_to_delete = mysession.query(Job_field).filter_by(job_name=name_).first()
-        if field_to_delete:
-                mysession.delete(field_to_delete)
-                mysession.commit()
-                print(f"Job_field {name_} deleted")
-        else:
-           print(f"Job field '{name_}' not  found")        
-    except Exception as exc:
-      print("Error deleting the job field ", exc)      
-
-def list_job_fields():
-    try:
-        fields = mysession.query(Job_field).all()
-        for field in fields:
-            print(f"Job Field id: {field.id}")
-            print(f"Job Name: {field.job_name}")
-            print("_" * 100)
-    except Exception as exc:
-        print("Error retrieving questions", exc) 
-
-def find_field_by_name():
-    query = input("Enter job field name > ")
-
-    try:
-        field = mysession.query(Job_field).filter_by(job_name=query).first()
-
-        if field:
-            print(f"Job Field id: {field.id}")
-            print(f"Job name: {field.job_name}")
-        else:
-            print("Field not found!")    
-    except Exception as exc:
-        print("Error fetching job field", exc) 
-
-
-#Class Topicfunctions
-def create_topic():
-    name = input("Create topic title > ")
-    field_id = input("Enter job field id > ")
-
-    try:
-        topic = Topic(title=name, job_field_id=field_id)
-        mysession.add(topic)
-        mysession.commit()
-        print(f"{topic.title} created successfully")
-    except Exception as exc:
-        print("Error creating topic", exc)    
- 
-def delete_topic():
-    try:
-        query = input("Enter Topic to delete: ")
-        del_topic = mysession.query(Topic).filter_by(id=query).first()
-
-        if del_topic:
-            mysession.delete(del_topic)
-            mysession.commit()
-            print("Topic delete successfully.")
-
-    except Exception as exc:
-        print("Error deleting topic", exc)    
-
+#Class Topic functions   
 def list_topics():
-    try:
-        topics = mysession.query(Topic).all()
-        jobs = mysession.query(Job_field).all()
-        print(f"Let's get your started with one of the available quizzes below.")
+    """lists all available topics from the database"""
+    topics = mysession.query(Topic).all()  # Fetch all topics without filtering
+    if not topics:
+        print("No topics available.")
+        return None
 
-        for topic in topics:
-            job = next((job for job in jobs if job.id == topic.job_field_id), None)
-            print(f"Title: {topic.title}")
-            print(f"Job field: {job.job_name if job else 'Not found'}")
-            print("_" * 100)
-    except Exception as exc:
-        print("Error retrieving questions", exc) 
-
-def find_topic_by_name():
-    query = input("Enter topic name > ")
-
-    try:
-        topic = mysession.query(Topic).filter_by(title=query).first()
-
-        if topic:
-            print(f"Title: {topic.title} belongs to Job field {topic.job_field_id}")
-        else:
-            print("Topic not found!")    
-    except Exception as exc:
-        print("Error fetching topic", exc)    
+    # Display the topics with numbering
+    for number, topic in enumerate(topics, start=1):
+        print(f"({number}) {topic.title}")
+    return topics
 
 def show_field_topics():
-    job_id =input("Select Topic To Practice 0n > ")
+    """Lists available topics for a given job field"""
+
+    job_id =input("Enter a job field number to get started: ")
 
     topics = mysession.query(Topic).filter_by(job_field_id=job_id).all()
     if topics:
         for index, topic in enumerate(topics, start=1):
-            print(f"{index}:  {topic.title}")
- 
+            print(f"{index}.  {topic.title}")
+    
+        choice = int(input("Select topic to practice on: "))
+        choosen_topic = topics[choice-1]
+        take_quiz(choosen_topic.title)
+    else:
+        print("Sorry, no topics available at the moment.")   
 
-    #     for topic in topics:
 
-    #         print(f"{topic.title}")
-
-    #  for number, job in enumerate(jobs, start=1) : #adds numbering to the job field objects
-    #        print(f"({number}) {job.job_name}")
 #Class Question functions
-#adds question to table questions
 def create_quiz():
-   quiz = input("Type the quiz > ")
-   answer1 = input("Answer 1: ")
-   answer2 = input("Answer 2: ")
-   answer3 = input("Answer 3: ")
-   answer4 = input("Answer 4: ")
-   topic_id = int(input("Enter the topic ID for this question > "))
+    """Creates a new question from the CLI"""
+    quiz = input("Type the quiz > ")
+    answer1 = input("Answer 1: ")
+    answer2 = input("Answer 2: ")
+    answer3 = input("Answer 3: ")
+    answer4 = input("Answer 4: ")
+    correct_answer = int(input("Enter the number of the correct answer (1-4): "))
+    
+    if not (1 <= correct_answer <= 4):  # Validates the correct answer
+        raise ValueError("Correct answer must be between 1 and 4.")
 
-   try:
-       correct_answer = int(input("Enter the number of the correct answer(1-4) "))
-       
-       if not (1 <= correct_answer <= 4): #validates the correct answer
-          raise ValueError("Correct answer must be between 1 and 4.")
-       
-       answers = [answer1, answer2, answer3, answer4]
-       answers_json = json.dumps(answers)
-
-       question = Question(
-            question_text=quiz,
-            answers_text=answers_json,  # Store answers as JSON string
-            correct_answer=correct_answer,  # Store the index of the correct answer
-            topic_id=topic_id
-        )
-       
-       mysession.add(question) #adds quiz to questions table
-       mysession.commit()
-
-       print("Question created successfully!")
-
-   except Exception as exc:
-      print("Error creating question", exc)   
+    # Show job fields before selecting one
+    jobs = mysession.query(Job_field).all()  # Retrieve all job fields
+    if not jobs:
+        print("Sorry no jobs available at the moment!!")
+        return  # Exits if no jobs are available
+    for number, job in enumerate(jobs, start=1):
+        print(f"{number}. {job.job_name}")
+    
+    try:
+        job_index = int(input("Select a job number above to add the quiz > "))
+        # Ensures the user picks a valid job number
+        if not (1 <= job_index <= len(jobs)):
+            raise ValueError("Invalid job number selected.")
         
+        selected_job = jobs[job_index - 1]  # fetches the selected job
+
+        # Lists existing topics
+        topics = list_topics()
+        if not topics:
+            # Allows user to create a new topic if none exist
+            new_topic_title = input("No topics found. Enter a new topic title: ")
+            new_topic = Topic(title=new_topic_title, job_field_id=selected_job.id)
+            mysession.add(new_topic)
+            mysession.commit()
+            topic_id = new_topic.id
+        else:
+            # prompts the user to select an existing topic or add a new one
+            topic_choice = input("Select a topic number above or type 'new' to add a new topic: ")
+            if topic_choice.lower() == 'new':
+                new_topic_title = input("Enter the new topic title: ")
+                new_topic = Topic(title=new_topic_title, job_field_id=selected_job.id)
+                mysession.add(new_topic)
+                mysession.commit()
+                topic_id = new_topic.id
+            else:
+                topic_index = int(topic_choice)
+                if not (1 <= topic_index <= len(topics)):
+                    raise ValueError("Invalid topic number selected.")
+                selected_topic = topics[topic_index - 1]
+                topic_id = selected_topic.id
+
+
+        
+        answers = [answer1, answer2, answer3, answer4]
+        answers_json = json.dumps(answers)  # Converts answers to JSON format
+
+        # Create the new question
+        question = Question(
+            question_text=quiz,
+            answers_text=answers_json,  # Stores answers as JSON string
+            correct_answer=correct_answer,  # Stores the index of the correct answer
+            topic_id=topic_id  
+        )
+
+        # Adds and commits the new question to the database
+        mysession.add(question)
+        mysession.commit()
+
+        print("Question created successfully!")
+
+    except Exception as exc:
+        print("Error creating question:", exc)
+              
 #deletes question from database
 def delete_quiz():
+    """Deletes from questions table by question id"""
     try:
         query = int(input("Enter Quiz ID to delete: "))
         quiz_to_delete = mysession.query(Question).filter_by(id=query).first()
@@ -317,6 +257,7 @@ def delete_quiz():
 
 #lists all questions
 def list_questions():
+    """Lists all questions availabble in the database"""
     try:
         questions = mysession.query(Question).all()
         for question in questions:
@@ -330,6 +271,7 @@ def list_questions():
 
 #finds questions by their id
 def find_question_by_id():
+    """Finds question by id"""
     question_id = input("Search quiz by id > ")
 
     try:
@@ -337,7 +279,7 @@ def find_question_by_id():
         if quiz:
             print(f"ID: {quiz.id}")
             print(f"Question: {quiz.question_text}")
-            print(f"Answers: {json.loads(quiz.answers_text)}")  # Convert JSON string back to list
+            print(f"Answers: {json.loads(quiz.answers_text)}")  # Converts JSON string back to list
             print(f"Correct Answer Index: {quiz.correct_answer}")
         else:
             print("Question not found.")
