@@ -21,7 +21,9 @@ def login():
         user = mysession.query(User).filter_by(username=username).first()
 
         if user and user.password == password:
+          print('=' * 100)
           print(f".........Glad to see you again {user.username}, What do you wanna do today?..........")
+          print('=' * 100)
           return User
         else:
            print("Invalid credentials!")
@@ -55,9 +57,11 @@ def show_jobs():
    except Exception as exc:
       print("Error fetching job fields ", exc)
 
-def take_quiz():
-    """CLI functions for starting a quiz of the selected topic"""
-    topic_choosen = input("Enter number > ")
+def take_quiz(topic_choosen=None):
+    """CLI function for starting a quiz of the selected topic"""
+    if topic_choosen is None:
+        topic_choosen = input("Choose Topic number> ")
+
     try:
         # Fetches a topic based on the title input
         topic = mysession.query(Topic).filter_by(title=topic_choosen).first()
@@ -70,14 +74,16 @@ def take_quiz():
         questions = mysession.query(Question).filter_by(topic_id=topic.id).all()
 
         if questions:
+            print('=' * 100)
             print(f"Starting quiz for topic: {topic.title}")
+            print('=' * 100)
             score = 0
         else:
-            print(f"Sorry, no available quizes for this {topic.title}")    
+            print(f"Sorry, no available quizzes for {topic.title}")    
 
         for question in questions:
             print(f"Question: {question.question_text}")
-            answers = json.loads(question.answers_text) 
+            answers = json.loads(question.answers_text)
             for index, answer in enumerate(answers, start=1):
                 print(f"{index}. {answer}")
 
@@ -86,16 +92,19 @@ def take_quiz():
 
                 if user_answer == question.correct_answer:
                     print("Correct!")
+                    print('=' * 100)
                     score += 1
                 else:
                     print(f"That doesn't seem right! The correct answer is: {question.correct_answer}")
+                    print('=' * 100)
             except ValueError:
                 print("Invalid input! Please enter a number between 1 and 4.")
 
         # Displays final score
+        print('=' * 100)
         print(f"Quiz finished! You scored: {score}/{len(questions)}")
-        print("SELECT ANOTHER JOB FIELD/ TOPIC TO PRACTICE ON >")
-        exit()
+        print('=' * 100)
+        
     except Exception as exc:
         print("Error taking the quiz", exc)
    
@@ -146,25 +155,38 @@ def list_topics():
     return topics
 
 def show_field_topics():
-    """Lists available topics for a given job field"""
+    """Lists available topics for a selected job field"""
 
-    job_id =input("Enter a job field number to get started: ")
-
-    topics = mysession.query(Topic).filter_by(job_field_id=job_id).all()
-    if topics:
-        for index, topic in enumerate(topics, start=1):
-            print(f"{index}.  {topic.title}")
+    while True:
+        job_id =input("Select a job field (number) above to get started: ")
     
-        choice = int(input("Select topic to practice on: "))
-        choosen_topic = topics[choice-1]
-        take_quiz(choosen_topic.title)
-    else:
-        print("Sorry, no topics available at the moment.")   
+        try:
+            topics = mysession.query(Topic).filter_by(job_field_id=job_id).all()
+            if not topics:
+                print("Invalid job field. Please select a number from the available job field number.")
+                continue
 
+            for index, topic in enumerate(topics, start=1):
+                print(f"{index}.  {topic.title}")
+            
+            try:
+                choice = int(input("Select a Topic (number) above to practice on: "))
+                if 1 <= choice <= len(topics):               
+                    choosen_topic = topics[choice-1]
+                    take_quiz(choosen_topic.title)
+                    break
+                else:
+                    print("Invalid choice, please select an existing topic.")    
+                    continue
+            except ValueError:
+                print("Invalid input! Please enter a number.") 
+            
+        except Exception as exc:
+            print("error occurred fetching topics: '{exc}'")
 
 #Class Question functions
 def create_quiz():
-    """Creates a new question from the CLI"""
+    """Adds a new question from cli app to questions table"""
     quiz = input("Type the quiz > ")
     answer1 = input("Answer 1: ")
     answer2 = input("Answer 2: ")
@@ -254,35 +276,3 @@ def delete_quiz():
     
     except Exception as exc:
         print("Error deleting question:", exc)
-
-#lists all questions
-def list_questions():
-    """Lists all questions availabble in the database"""
-    try:
-        questions = mysession.query(Question).all()
-        for question in questions:
-            print(f"Question id: {question.id}")
-            print(f"Question: {question.question_text}")
-            print(f"Answers: {json.loads(question.answers_text)}")
-            print(f"Correct Answer Index: {question.correct_answer}")
-            print("_" * 100)
-    except Exception as exc:
-        print("Error retrieving questions", exc)        
-
-#finds questions by their id
-def find_question_by_id():
-    """Finds question by id"""
-    question_id = input("Search quiz by id > ")
-
-    try:
-        quiz = mysession.query(Question).filter_by(id=question_id).first()
-        if quiz:
-            print(f"ID: {quiz.id}")
-            print(f"Question: {quiz.question_text}")
-            print(f"Answers: {json.loads(quiz.answers_text)}")  # Converts JSON string back to list
-            print(f"Correct Answer Index: {quiz.correct_answer}")
-        else:
-            print("Question not found.")
-
-    except Exception as exc:
-        print("Error retrieving quiz", exc)    
