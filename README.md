@@ -1,18 +1,57 @@
 # Interview Master
-- Interview Master is a CLI app that aims at helping job seekers prepare for interview by taking interactive quizzes in their job field.
-- A user gets to create an account. Then selects their job field from a predefined list.
-- The user then gets to choose between :  ["take a test"] vs ["create a quiz"]
-  -For ["take a test"], the user takes a quiz test from their selected job_field. Once the user completes the quiz, they get to see their score  and the questions they got right.
- -For ["create a quiz"], the user can add a new quiz to their selected job_field, that will have questions, the multiple choices and correct answer to each question.
-- Finally the user can select the "quit" to exit from the CLI app.
+- **Interview Master** is a CLI app designed to store user data, job fields, topics, and interview questions, offering a structured system for practicing interview questions across various job categories.
+- Interview Master uses **SQLAlchemy** to manage the _interview_prep_ SQLite database.
 
-    ## The database schema:
- a) users (id, username, password) - will store the user details.
+Table of Contents
+1. [Installation](#installation)
+2. [Database Models](#db.models)
+3. [CLI Commands](#cli-py)
+4. [Helper Functions](#helpers-py)
+5. [Database](#interview_prep-db)
+6. [Seeding Data](#seed-py)
 
- b) job_fields (id, job_name) - will have job categories e.g. Data Science, DevOps.
+1. Installation
+Follow these steps to set up the project:
 
- c) job_field_quizzes(id, title, job_field_id) - will have quizzes for each job_field.
+## Step 1: Fork and Clone the Repository
+- Fork the repository to your GitHub account.
+- Clone the repository to your local machine:
+   ```bash
+   git clone https://github.com/your-username/interview-master.git 
+   cd interview-master
 
- d) questions(id,  job_quiz_id, question_text) -  will have questions for each job_field_quiz.
+## Step 2: Install Dependencies
+Install the required Python dependencies using pipenv (ensure that you have pipenv installed):
+    bash
+    pipenv install
 
- e) answers (id, question_id, answer_text, correct_answer) - will have multiple choice answers for each question.
+## Step 3: Activate the Virtual Environment
+Start a shell within the pipenv environment:
+    bash
+    pipenv shell
+
+# 2. db.models
+This file has classes that define the tables in the interview_prep database. These classes include:
+ - `User`: Defines user information, including username and password.
+ - `Job_field`: Represents a number of fields with topics from which user can practice quizzes on.
+ - `Topic`: Defines individual topics related to a job field.
+ - `Question`: Defines interview questions related to a specific topic.
+
+# 3. cli.py
+Contains the command-line interface (CLI) function.
+To run the app:
+1. Navigate to the lib directory: cd lib/
+2. On the terminal execute: python cli.py
+
+# 4. helpers.py
+Provides helper functions that run the CLI app.
+
+# 5. Interview_prep.db
+This is the SQLite database that stores the data for this project. It contains the tables for the data models defined in db.models.
+
+# 6. seed.py
+Contains functions that seed the database with sample data for testing the app. As well as database query functions
+- To seed the database or run a query using seed.py:
+ 1. Uncomment the function calls in the file.
+ 2.Run in the terminal:
+       python seed.py
