@@ -45,11 +45,13 @@ def menu2():
         
         choice = input("> ")
         if choice == "3":
-           print("SELECT JOB FIELD.")
+           print('=' * 100)
            show_jobs() #shows available job fields
+           print('=' * 100)
            take_quiz()
                
         elif choice == "4":
+           print('=' * 100)
            create_quiz()
         elif choice == "5":
            delete_user()

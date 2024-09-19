@@ -9,7 +9,9 @@ mysession = session1()
 #CLI functions
 def exit_program():
   """Exits from the CLI app"""
+  print('*' * 100)
   print('Good Luck in your Interview')
+  print('*' * 100)
   exit()
 
 def login():
@@ -44,7 +46,8 @@ def show_jobs():
 
        show_field_topics()
            
-       selected_job = input("Select Topic(number) To Practice On: ")    
+       selected_job = input("Select Topic(number) To Practice On: ")  
+       print('=' * 100)  
 
        selected_job_number = int(selected_job) #converts selected_job input to integer
 
@@ -159,6 +162,7 @@ def show_field_topics():
 
     while True:
         job_id =input("Select a job field (number) above to get started: ")
+        print('=' * 100)
     
         try:
             topics = mysession.query(Topic).filter_by(job_field_id=job_id).all()
@@ -192,11 +196,20 @@ def create_quiz():
     answer2 = input("Answer 2: ")
     answer3 = input("Answer 3: ")
     answer4 = input("Answer 4: ")
-    correct_answer = int(input("Enter the number of the correct answer (1-4): "))
+    print('=' * 100)
     
-    if not (1 <= correct_answer <= 4):  # Validates the correct answer
-        raise ValueError("Correct answer must be between 1 and 4.")
-
+    while True:
+        try:
+            correct_answer = int(input("Enter the number of the correct answer (1-4): "))
+            if 1 <= correct_answer <= 4:  # Validates the correct answer
+                print(f"Correct answer set to {correct_answer}")
+                break
+            else:
+                print("Correct answer must be between 1 and 4.") 
+                
+        except Exception as exc:
+             print(f"Correct answer must be a value between 1 and 4 {exc}" )    
+    
     # Show job fields before selecting one
     jobs = mysession.query(Job_field).all()  # Retrieve all job fields
     if not jobs:
@@ -207,6 +220,7 @@ def create_quiz():
     
     try:
         job_index = int(input("Select a job number above to add the quiz > "))
+        print('=' * 100)
         # Ensures the user picks a valid job number
         if not (1 <= job_index <= len(jobs)):
             raise ValueError("Invalid job number selected.")
@@ -218,6 +232,7 @@ def create_quiz():
         if not topics:
             # Allows user to create a new topic if none exist
             new_topic_title = input("No topics found. Enter a new topic title: ")
+            print('=' * 100)
             new_topic = Topic(title=new_topic_title, job_field_id=selected_job.id)
             mysession.add(new_topic)
             mysession.commit()
@@ -225,6 +240,7 @@ def create_quiz():
         else:
             # prompts the user to select an existing topic or add a new one
             topic_choice = input("Select a topic number above or type 'new' to add a new topic: ")
+            print('=' * 100)
             if topic_choice.lower() == 'new':
                 new_topic_title = input("Enter the new topic title: ")
                 new_topic = Topic(title=new_topic_title, job_field_id=selected_job.id)
@@ -256,23 +272,8 @@ def create_quiz():
         mysession.commit()
 
         print("Question created successfully!")
+        print('=' * 100)
 
     except Exception as exc:
         print("Error creating question:", exc)
               
-#deletes question from database
-def delete_quiz():
-    """Deletes from questions table by question id"""
-    try:
-        query = int(input("Enter Quiz ID to delete: "))
-        quiz_to_delete = mysession.query(Question).filter_by(id=query).first()
-        
-        if quiz_to_delete:
-            mysession.delete(quiz_to_delete)
-            mysession.commit()
-            print("Quiz deleted successfully.")
-        else:
-            print("Question does not exist!")
-    
-    except Exception as exc:
-        print("Error deleting question:", exc)
