@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from helpers import mysession, delete_user
+from helpers import mysession
 from db.models import Topic, Job_field, User, Question
 import json
 
@@ -172,4 +172,22 @@ def list_questions():
             print("_" * 100)
     except Exception as exc:
         print("Error retrieving questions", exc)
-# list_questions()          
+# list_questions()     
+
+#deletes question from database
+def delete_quiz():
+    """Deletes from questions table by question id"""
+    try:
+        query = int(input("Enter Quiz ID to delete: "))
+        quiz_to_delete = mysession.query(Question).filter_by(id=query).first()
+        
+        if quiz_to_delete:
+            mysession.delete(quiz_to_delete)
+            mysession.commit()
+            print("Quiz deleted successfully.")
+        else:
+            print("Question does not exist!")
+    
+    except Exception as exc:
+        print("Error deleting question:", exc)     
+# delete_quiz()        
