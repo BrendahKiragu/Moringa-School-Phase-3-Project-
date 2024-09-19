@@ -12,10 +12,6 @@ class User(Base):
     username = Column(String(), nullable=False)
     password = Column(String(), nullable=False)
     
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-
 class Job_field(Base):
     __tablename__ = 'job_fields'    
 
