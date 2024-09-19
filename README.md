@@ -10,48 +10,49 @@ Table of Contents
 5. [Database](#interview_prep-db)
 6. [Seeding Data](#seed-py)
 
-1. Installation
+# Installation
 Follow these steps to set up the project:
 
 ## Step 1: Fork and Clone the Repository
 - Fork the repository to your GitHub account.
 - Clone the repository to your local machine:
    ```bash
-   git clone https://github.com/your-username/interview-master.git 
+   git clone https://github.com/BrendahKiragu/phase-3-project 
    cd interview-master
 
 ## Step 2: Install Dependencies
 Install the required Python dependencies using pipenv (ensure that you have pipenv installed):
-    bash
+    ```bash
     pipenv install
 
 ## Step 3: Activate the Virtual Environment
 Start a shell within the pipenv environment:
-    bash
+    ```bash
     pipenv shell
 
-# 2. db.models
+# Database Models
 This file has classes that define the tables in the interview_prep database. These classes include:
  - `User`: Defines user information, including username and password.
  - `Job_field`: Represents a number of fields with topics from which user can practice quizzes on.
  - `Topic`: Defines individual topics related to a job field.
  - `Question`: Defines interview questions related to a specific topic.
 
-# 3. cli.py
+# CLI Commands
 Contains the command-line interface (CLI) function.
 To run the app:
 1. Navigate to the lib directory: cd lib/
 2. On the terminal execute: python cli.py
 
-# 4. helpers.py
+# Helper Functions
 Provides helper functions that run the CLI app.
 
-# 5. Interview_prep.db
+# Database
 This is the SQLite database that stores the data for this project. It contains the tables for the data models defined in db.models.
 
-# 6. seed.py
+# Seeding Data
 Contains functions that seed the database with sample data for testing the app. As well as database query functions
 - To seed the database or run a query using seed.py:
- 1. Uncomment the function calls in the file.
- 2.Run in the terminal:
+   1. Uncomment the function calls in the file.
+   2. Run in the terminal:
+       ```bash
        python seed.py
