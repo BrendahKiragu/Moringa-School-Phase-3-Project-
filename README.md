@@ -4,11 +4,11 @@
 
 Table of Contents
 1. [Installation](#installation)
-2. [Database Models](#db.models)
-3. [CLI Commands](#cli-py)
-4. [Helper Functions](#helpers-py)
-5. [Database](#interview_prep-db)
-6. [Seeding Data](#seed-py)
+2. [Database Models](#database_models)
+3. [CLI Commands](#cli_commands)
+4. [Helper Functions](#helpers_functions)
+5. [Database](#database)
+6. [Seeding Data](#seeding_data)
 
 # Installation
 Follow these steps to set up the project:
