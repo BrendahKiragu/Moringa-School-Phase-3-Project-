@@ -4,7 +4,7 @@
 
 ## Table of Contents
 1. [Installation](#installation)
-2. [Database Models](#database-models)
+2. [db Models](#db-models)
 3. [CLI Commands](#cli-commands)
 4. [Helper Functions](#helper-functions)
 5. [Database](#database)
@@ -30,27 +30,27 @@ Start a shell within the pipenv environment:
     ```bash
     pipenv shell
 
-# Database Models
-This file has classes that define the tables in the interview_prep database. These classes include:
+# db Models
+*lib/db/models.py* file has classes that define the tables in the interview_prep database. These classes include:
  - `User`: Defines user information, including username and password.
  - `Job_field`: Represents a number of fields with topics from which user can practice quizzes on.
  - `Topic`: Defines individual topics related to a job field.
  - `Question`: Defines interview questions related to a specific topic.
 
 # CLI Commands
-Contains the command-line interface (CLI) function.
-To run the app:
+*lib/cli.py* Contains the command-line interface (CLI) functions.
+To interact with the app:
 1. Navigate to the lib directory: cd lib/
 2. On the terminal execute: python cli.py
 
 # Helper Functions
-Provides helper functions that run the CLI app.
+*lib/helpers.py* Provides helper functions that run the CLI app.
 
 # Database
-This is the SQLite database that stores the data for this project. It contains the tables for the data models defined in db.models.
+*lib/db/interview_prep.db* is the SQLite database that stores the data for this project. It contains the tables for the data models defined in [db Models](#db-models).
 
 # Seeding Data
-Contains functions that seed the database with sample data for testing the app. As well as database query functions
+*lib/seed.py* contains functions that seed the database with sample data for testing the app. As well as database query functions
 - To seed the database or run a query using seed.py:
    1. Uncomment the function calls in the file.
    2. Run in the terminal:
