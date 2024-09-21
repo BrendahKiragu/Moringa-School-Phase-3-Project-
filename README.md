@@ -17,42 +17,59 @@ Follow these steps to set up the project:
 - Fork the repository to your GitHub account.
 - Clone the repository to your local machine:
    ```bash
-   git clone https://github.com/BrendahKiragu/phase-3-project 
-   cd interview-master
+   git clone https://github.com/BrendahKiragu/phase-3-project
+   
+   cd phase-3-project
 
 ## Step 2: Install Dependencies
-Install the required Python dependencies using pipenv (ensure that you have pipenv installed):
-    ```bash
-    pipenv install
+Install the required Python dependencies using pipenv :
+    ``` pipenv install ```
 
 ## Step 3: Activate the Virtual Environment
 Start a shell within the pipenv environment:
-    ```bash
-    pipenv shell
-
+    ``` pipenv shell ```
+    
 # db Models
-*lib/db/models.py* file has classes that define the tables in the interview_prep database. These classes include:
- - `User`: Defines user information, including username and password.
- - `Job_field`: Represents a number of fields with topics from which user can practice quizzes on.
- - `Topic`: Defines individual topics related to a job field.
- - `Question`: Defines interview questions related to a specific topic.
+The *lib/db/models.py* file defines the following data models (tables) in the interview_prep database:
+ - `User`: Stores user information, including username and password.
+ - `Job_field`: Represents job fields from which users get to practice questions related to a given field.
+ - `Topic`: Defines individual topics under each job field.
+ - `Question`: Defines interview questions tied to a specific topic, categorized under job fields.
 
 # CLI Commands
-*lib/cli.py* Contains the command-line interface (CLI) functions.
-To interact with the app:
-1. Navigate to the lib directory: cd lib/
-2. On the terminal execute: python cli.py
+The *lib/cli.py* contains the command-line interface (CLI) commands for you to interact with the app.
+To interact with the app on the CLI:
+1. Navigate to the lib directory: ``` cd lib/ ```
+2. Run the CLI app: ``` python cli.py ```
+3. 
+You can interact with the app, such as creating your user account, add new quizs and practicing interview questions.
 
 # Helper Functions
-*lib/helpers.py* Provides helper functions that run the CLI app.
+The *lib/helpers.py* file contains helper functions that run the CLI app. These functions handle tasks like:
+ - displaying user options.
+ - processing user input.
+ - managing database interactions.
 
 # Database
-*lib/db/interview_prep.db* is the SQLite database that stores the data for this project. It contains the tables for the data models defined in [db Models](#db-models).
+The SQLite database used by Interview Master is located at *lib/db/interview_prep.db*. This database contains the tables for users, job fields, topics, and interview questions as defined in the data models section.
 
 # Seeding Data
-*lib/seed.py* contains functions that seed the database with sample data for testing the app. As well as database query functions
-- To seed the database or run a query using seed.py:
-   1. Uncomment the function calls in the file.
-   2. Run in the terminal:
-       ```bash
-       python seed.py
+To add data to the database for testing or demonstration purposes, you can use the lib/seed.py file. It contains functions to seed the database with sample data, as well as utility functions for querying the database.
+  ### Seeding steps:
+  1. Open *lib/seed.py*
+  2. Uncomment the seed or query function call you'd like to run.
+  3. In the terminal, run the following command to execute the seeding script:
+      ``` python seed.py ```
+
+ # Usage
+ After setting up and activating the virtual environment, you can use the CLI to practice interview questions based on different job categories and topics. Here's how you can interact with the CLI:
+
+1. **Create a User:** Start by creating your user account with a username and password.
+2. **Select a Job Field:** Choose a job field you wish to focus on (e.g., software developer, data science, python developer).
+3. **Pick a Topic:** After selecting a job field, you can choose a specific topic related to that field (e.g., algorithms, OOP).
+4. **Answer Questions:** The app will present you with questions related to the chosen topic for practice.
+5. **Create Quiz** Add questions to the existing topics or create your own topic with quizs.
+
+
+# License Information
+The Interview Master project is licensed under the MIT License.        
