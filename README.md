@@ -6,11 +6,12 @@
 1. [Installation](#installation)
 2. [db Models](#db-models)
 3. [CLI Commands](#cli-commands)
-4. [Helper Functions](#helper-functions)
-5. [Database](#database)
-6. [Seeding Data](#seeding-data)
-7. [Usage](#usage)
-8. [License](#license)
+4. [CLI Functions](#cli-functions)
+5. [Helper Functions](#helper-functions)
+6. [Database](#database)
+7. [Seeding Data](#seeding-data)
+8. [APP Usage](#app-usage)
+9. [License](#license)
    
 
 # Installation
@@ -47,6 +48,37 @@ To interact with the app on the CLI:
  
 You can interact with the app, such as creating your user account, add new quizs and practicing interview questions.
 
+# CLI functions
+ ### `app()`
+This is the main function that starts and runs the CLI application. It presents the user with the main menu and manages the flow of the application based on user input. It includes options for creating an account, logging in, deleting an account, and exiting the program.
+
+ ### `menu()`
+Displays the initial menu when the application starts, showing options for creating an account, logging in, or deleting an account. It also includes an option to exit the application.
+
+### `menu2()`
+Displays the second menu after a user logs in or creates an account. This menu offers additional functionalities such as practicing for interviews, creating quizzes, deleting an account, or logging out.
+
+### `exit_program()`
+Terminates the program when the user chooses to exit.
+
+ ### `create_user()`
+Handles the process of creating a new user account, including any necessary input and validation.
+
+ ### `login()`
+Handles user login by verifying credentials (username and password). If successful, it grants access to the menu2; if unsuccessful, it prompts the user to try again.
+
+ ### `show_jobs()`
+Displays a list of available job fields for the user to choose from, helping them decide what interview to practice for.
+
+ ### `create_quiz()`
+Allows a logged-in user to create a quiz related to interview preparation by specifying questions and answers.
+
+ ### `delete_user()`
+Deletes the current user’s account from the system. This option is available in both the main and logged-in menus.
+
+ ### `take_quiz()`
+Allows the user to take a quiz from the available set of questions after selecting a job field.
+
 # Helper Functions
 The *lib/helpers.py* file contains helper functions that run the CLI app. These functions handle tasks like:
  - displaying user options.
@@ -64,7 +96,7 @@ To add data to the database for testing or demonstration purposes, you can use t
   3. In the terminal, run the following command to execute the seeding script:
       ``` python seed.py ```
 
- # Usage
+ # APP Usage
  After setting up and activating the virtual environment, you can use the CLI to practice interview questions based on different job categories and topics. Here's how you can interact with the CLI:
 
 1. **Create a User:** Start by creating your user account with a username and password.
