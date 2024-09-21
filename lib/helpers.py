@@ -107,7 +107,9 @@ def take_quiz(topic_choosen=None):
         print('=' * 100)
         print(f"Quiz finished! You scored: {score}/{len(questions)}")
         print('=' * 100)
-        
+        print("What would you like to do next > ")
+        from cli import menu2
+        menu2()
     except Exception as exc:
         print("Error taking the quiz", exc)
    
@@ -210,8 +212,8 @@ def create_quiz():
         except Exception as exc:
              print(f"Correct answer must be a value between 1 and 4 {exc}" )    
     
-    # Show job fields before selecting one
-    jobs = mysession.query(Job_field).all()  # Retrieve all job fields
+    # Shows job fields before selecting one
+    jobs = mysession.query(Job_field).all()  # Retrieves all job fields
     if not jobs:
         print("Sorry no jobs available at the moment!!")
         return  # Exits if no jobs are available
@@ -221,9 +223,8 @@ def create_quiz():
     try:
         job_index = int(input("Select a job number above to add the quiz > "))
         print('=' * 100)
-        # Ensures the user picks a valid job number
         if not (1 <= job_index <= len(jobs)):
-            raise ValueError("Invalid job number selected.")
+            print("Invalid job number selected")
         
         selected_job = jobs[job_index - 1]  # fetches the selected job
 
@@ -233,10 +234,10 @@ def create_quiz():
             # Allows user to create a new topic if none exist
             new_topic_title = input("No topics found. Enter a new topic title: ")
             print('=' * 100)
-            new_topic = Topic(title=new_topic_title, job_field_id=selected_job.id)
+            new_topic = Topic(title=new_topic_title, job_field_id=selected_job.id) #create a new instance of Topic
             mysession.add(new_topic)
             mysession.commit()
-            topic_id = new_topic.id
+            topic_id = new_topic.id #add to the Questions table column of topic_id
         else:
             # prompts the user to select an existing topic or add a new one
             topic_choice = input("Select a topic number above or type 'new' to add a new topic: ")
