@@ -9,6 +9,9 @@
 4. [Helper Functions](#helper-functions)
 5. [Database](#database)
 6. [Seeding Data](#seeding-data)
+7. [Usage](#usage)
+8. [License](#license)
+   
 
 # Installation
 Follow these steps to set up the project:
@@ -41,7 +44,7 @@ The *lib/cli.py* contains the command-line interface (CLI) commands for you to i
 To interact with the app on the CLI:
 1. Navigate to the lib directory: ``` cd lib/ ```
 2. Run the CLI app: ``` python cli.py ```
-3. 
+ 
 You can interact with the app, such as creating your user account, add new quizs and practicing interview questions.
 
 # Helper Functions
