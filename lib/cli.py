@@ -55,8 +55,10 @@ def menu2():
            create_quiz()
         elif choice == "5":
            delete_user()
+           exit_program()
         elif choice == "0":
-           print('LOGGING OUT...')
+           print("Thank You for using Interview Master. See you again.")
+           exit_program()
            break
         else:
            print("Invalid choice, please try again.")    
