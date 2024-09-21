@@ -24,7 +24,7 @@ def login():
 
         if user and user.password == password:
           print('=' * 100)
-          print(f".........Glad to see you again {user.username}, What do you wanna do today?..........")
+          print(f".........Glad to see you again 😁😁 {user.username}, What do you wanna do today?..........")
           print('=' * 100)
           return User
         else:
@@ -78,7 +78,8 @@ def take_quiz(topic_choosen=None):
 
         if questions:
             print('=' * 100)
-            print(f"Starting quiz for topic: {topic.title}")
+            print(f"Starting quiz for topic: {topic.title}, in 3...2...1...")
+            print("Wishing you all the best 🤝")
             print('=' * 100)
             score = 0
         else:
@@ -94,18 +95,18 @@ def take_quiz(topic_choosen=None):
                 user_answer = int(input("Your answer (1-4)>_ "))
 
                 if user_answer == question.correct_answer:
-                    print("Correct!")
+                    print("✅ Correct! ✅")
                     print('=' * 100)
                     score += 1
                 else:
-                    print(f"That doesn't seem right! The correct answer is: {question.correct_answer}")
+                    print(f"That doesn't seem right🤔🤔! The correct answer is: {question.correct_answer}")
                     print('=' * 100)
             except ValueError:
                 print("Invalid input! Please enter a number between 1 and 4.")
 
         # Displays final score
         print('=' * 100)
-        print(f"Quiz finished! You scored: {score}/{len(questions)}")
+        print(f"Quiz finished! 👏👏👏👏 You scored: {score}/{len(questions)} 🥳🥳🥳🥳")
         print('=' * 100)
         print("What would you like to do next > ")
         from cli import menu2
